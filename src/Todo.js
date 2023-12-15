@@ -12,13 +12,19 @@ function ToDo() {
       return;
     }
     setInputError(false);
-    setTodos([...todos, newTodo]);
+    setTodos([...todos, { text: newTodo, completed: false }]);
     event.target.reset();
   };
 
   const removeTodo = (index) => {
     const newTodos = [...todos];
     newTodos.splice(index, 1);
+    setTodos(newTodos);
+  };
+
+  const toggleCompletion = (index) => {
+    const newTodos = [...todos];
+    newTodos[index].completed = !newTodos[index].completed;
     setTodos(newTodos);
   };
 
@@ -31,8 +37,18 @@ function ToDo() {
       {inputError && <p> Enter your a todo.</p>}
       <ul>
         {todos.map((todo, index) => (
-          <li>
-            {todo}
+          <li key={index}>
+            <span
+              style={{
+                textDecoration: todo.completed ? "line-through" : "none",
+              }}
+            >
+              {todo.text}
+            </span>
+            <button onClick={() => toggleCompletion(index)}>
+              {todo.completed ? "Incomplete" : "Complete"}
+            </button>
+
             <button onClick={() => removeTodo(index)}>Remove</button>
           </li>
         ))}
